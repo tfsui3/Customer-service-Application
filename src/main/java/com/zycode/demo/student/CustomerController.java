@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("student")
-public class StudentController {
+@RequestMapping("customer")
+public class CustomerController {
 
     @GetMapping
-    public List<Student> getAllStudent(){
+    public List<Customer> getAllStudent(){
         return List.of(
-                new Student(UUID.randomUUID(),"James","Bond","jamesbond@gamail.com",Student.Gender.MALE),
-                new Student(UUID.randomUUID(),"Elisa","Tamara","elisatamara@gmail.com",Student.Gender.FEMALE)
+                new Customer(UUID.randomUUID(),"James","Bond","jamesbond@gamail.com", Customer.Gender.MALE),
+                new Customer(UUID.randomUUID(),"Elisa","Tamara","elisatamara@gmail.com", Customer.Gender.FEMALE)
         );
     }
 }

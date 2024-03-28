@@ -1,27 +1,27 @@
 package com.zycode.demo.student;
 
 import java.util.UUID;
-public class Student {
+public class Customer {
 
-    private final UUID studentId;
+    private final UUID customerId;
     private final String firstName;
     private final String lastName;
     private final String email;
     private final Gender gender;
-    public Student(UUID studentId,
+    public Customer(UUID customerId,
                     String firstName,
                     String lastName,
                     String email,
                     Gender gender){
-        this.studentId = studentId;
+        this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.gender = gender;
     }
 
-    public UUID getStudentId() {
-        return studentId;
+    public UUID getCustomerId() {
+        return customerId;
     }
 
     public String getFirstName() {
