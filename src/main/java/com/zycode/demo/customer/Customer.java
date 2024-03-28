@@ -1,4 +1,4 @@
-package com.zycode.demo.student;
+package com.zycode.demo.customer;
 
 import java.util.UUID;
 public class Customer {
