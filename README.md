@@ -36,7 +36,6 @@ This project is a comprehensive application that encompasses a wide range of sof
 ## Continuous Integration and Deployment
 
 - **GitHub Actions**: Automates software deployment processes.
-- **Slack Integration**: Monitors deployment processes and notifications via Slack.
 
 ## Testing
 
