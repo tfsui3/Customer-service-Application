@@ -1,11 +1,14 @@
 import './App.css';
 import Container from './Container';
+import Footer from './Footer';
 import { getAllCustomers } from './client';
+import AddCustomerForm from'./forms/AddCustomerForm';
 import React, { Component } from 'react';
 import{
   Avatar,
   Spin,
-  Table
+  Table,
+  Modal
 } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 
@@ -15,12 +18,17 @@ class App extends Component {
 
   state = {
     customers:[],
-    isFetching:false
+    isFetching:false,
+    isAddCustomerModalVisible: false
   }
 
   componentDidMount(){
     this.fetchCustomers();
   }
+
+  openAddCustomerModal = () => this.setState({isAddCustomerModalVisible: true})
+
+  closeAddCustomerModal = () => this.setState({isAddCustomerModalVisible: false})
 
   fetchCustomers = () => {
     this.setState({
@@ -96,6 +104,18 @@ class App extends Component {
               columns={columns} 
               pagination={false}
               rowKey='customerId' />
+            <Modal
+              title='Add a new customer'
+              open={this.state.isAddCustomerModalVisible}
+              onOk={this.closeAddCustomerModal}
+              onCancel={this.closeAddCustomerModal}
+              width={1000}>
+              <AddCustomerForm />
+            </Modal>
+            <Footer
+              numberOfCustomers = {customers.length}
+              handleAddCustomerClickEvent={this.openAddCustomerModal}
+            />
           </Container>
           )
       }

@@ -1,5 +1,6 @@
 package com.zycode.demo.customer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,11 +12,14 @@ import java.util.UUID;
 @RequestMapping("/customer")
 public class CustomerController {
 
+    private final CustomerService customerService;
+
+    @Autowired
+    public CustomerController(CustomerService customerService){
+        this.customerService = customerService;
+    }
     @GetMapping
     public List<Customer> getAllStudent(){
-        return List.of(
-                new Customer(UUID.randomUUID(),"James","Bond","jamesbond@gamail.com", Customer.Gender.MALE),
-                new Customer(UUID.randomUUID(),"Elisa","Tamara","elisatamara@gmail.com", Customer.Gender.FEMALE)
-        );
+        return customerService.getAllCustomers();
     }
 }
