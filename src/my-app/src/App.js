@@ -3,12 +3,14 @@ import Container from './Container';
 import Footer from './Footer';
 import { getAllCustomers } from './client';
 import AddCustomerForm from'./forms/AddCustomerForm';
+import { errorNotification } from './Notification';
 import React, { Component } from 'react';
 import{
   Avatar,
   Spin,
   Table,
-  Modal
+  Modal,
+  Empty
 } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 
@@ -42,12 +44,48 @@ class App extends Component {
         customers,
         isFetching: false
       });
+    })
+    .catch(error =>{
+      const message = error.error.message;
+      const description = error.error.error;
+      errorNotification(message, description);
+      this.setState({
+        isFetching: false
+      });
     });
   }
 
   render() {
 
       const{ customers, isFetching } = this.state;
+      
+      const commonElements = () => (
+        <div>
+          <Modal
+            title='Add a new customer'
+            open={this.state.isAddCustomerModalVisible}
+            onOk={this.closeAddCustomerModal}
+            onCancel={this.closeAddCustomerModal}
+            width={1000}>
+            <AddCustomerForm 
+              onSuccess={() => {
+                this.closeAddCustomerModal();
+                this.fetchCustomers();
+              }}
+              onFailure={(error) =>{
+                const message = error.error.message;
+                const description = error.error.httpStatus;
+                console.log(JSON.stringify(error));
+                errorNotification(message,description);
+              }}
+            />
+          </Modal>
+          <Footer
+            numberOfCustomers = {customers.length}
+            handleAddCustomerClickEvent={this.openAddCustomerModal}
+          />
+        </div>
+      )
 
       if(isFetching){
         return (
@@ -100,27 +138,24 @@ class App extends Component {
         return (
           <Container>
             <Table 
+              style={{marginBottom:'100px'}}
               dataSource={customers} 
               columns={columns} 
               pagination={false}
               rowKey='customerId' />
-            <Modal
-              title='Add a new customer'
-              open={this.state.isAddCustomerModalVisible}
-              onOk={this.closeAddCustomerModal}
-              onCancel={this.closeAddCustomerModal}
-              width={1000}>
-              <AddCustomerForm />
-            </Modal>
-            <Footer
-              numberOfCustomers = {customers.length}
-              handleAddCustomerClickEvent={this.openAddCustomerModal}
-            />
+              {commonElements()}
           </Container>
           )
       }
 
-      return <h1> No Customers found</h1>
+      return (
+      <Container>
+        <Empty description={
+          <h1>No Customer found</h1>
+        }/>
+        {commonElements()}
+      </Container>
+      )
     }
 }
 

@@ -17,15 +17,34 @@ public class CustomerDataAccessService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public int insertCustomer(UUID customerId, Customer customer) {
+        String sql = "" +
+                "INSERT INTO customer ("+
+                "customer_id,"+
+                "first_name,"+
+                "last_name,"+
+                "email,"+
+                "gender) " +
+                "VALUES(?, ?, ?, ?, ?)";
+        return jdbcTemplate.update(
+                sql,
+                customerId,
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail(),
+                customer.getGender().name().toUpperCase()
+        );
+    }
+
     public List<Customer> selectAllCustomers(){
         String sql = "" +
                 "SELECT " +
-                " customer_id," +
-                " first_name,"+
-                " last_name,"+
-                " email,"+
-                " gender "+
-                "From customer";
+                "customer_id," +
+                "first_name,"+
+                "last_name,"+
+                "email,"+
+                "gender "+
+                "FROM customer";
         return jdbcTemplate.query(sql,(resultSet, i) -> {
             String customerIdStr = resultSet.getString("customer_id");
             UUID customerId = UUID.fromString(customerIdStr);
@@ -39,5 +58,21 @@ public class CustomerDataAccessService {
                     customerId, firstName, lastName, email, gender
             );
         });
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public boolean isEmailTaken(String email) {
+        String sql = "" +
+                "SELECT EXISTS(" +
+                "    SELECT 1 " +
+                "    FROM customer " +
+                "    WHERE email = ?" +
+                "  )";
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                new Object[] {email},
+                (resultSet, i) -> resultSet.getBoolean(1));
+
     }
 }
